@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.6'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+// ADICIONE ESTAS LINHAS PARA FORÇAR JAVA 17
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+group = 'com.nunes'
+version = '0.0.1-SNAPSHOT'
+description = 'Site que visa venda de carros'
+
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    enabled = false
+}
+
+dependencies {
+    // SPRING BOOT STARTERS (OBRIGATÓRIOS)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // BANCO DE DADOS
+    implementation 'com.oracle.database.jdbc:ojdbc11:21.9.0.0'
+
+    // LOMBOK
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // DESENVOLVIMENTO
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // TESTES
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
