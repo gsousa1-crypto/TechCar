@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - TechCar</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .dashboard-cards { display: flex; gap: 20px; margin: 30px 0; }
+        .card { background: #f8f9fa; padding: 20px; border-radius: 5px; flex: 1; border-left: 4px solid #007bff; }
+        .btn { display: inline-block; padding: 10px 15px; margin: 5px;
+               background: #007bff; color: white; text-decoration: none;
+               border-radius: 3px; }
+        .btn:hover { background: #0056b3; }
+        .stats { font-size: 24px; font-weight: bold; color: #007bff; }
+    </style>
+</head>
+<body>
+<h1>Dashboard TechCar</h1>
+<p>Bem-vindo ao sistema de vendas de veiculos!</p>
+
+<div class="dashboard-cards">
+    <div class="card">
+        <h3>Total de Veiculos</h3>
+        <div class="stats" th:text="${totalVeiculos}">0</div>
+        <a th:href="@{/app/veiculos}" class="btn">Ver Todos</a>
+    </div>
+
+    <div class="card">
+        <h3>Veiculos Disponiveis</h3>
+        <div class="stats" th:text="${veiculosDisponiveis}">0</div>
+        <a th:href="@{/app/veiculos}" class="btn">Ver Disponiveis</a>
+    </div>
+
+    <div class="card">
+        <h3>Acoes Rapidas</h3>
+        <div>
+            <a th:href="@{/app/veiculos/novo}" class="btn">Novo Veiculo</a>
+            <a th:href="@{/}" class="btn">Pagina Inicial</a>
+            <a th:href="@{/logout}" class="btn">Sair</a>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 30px; background: #e9ecef; padding: 15px; border-radius: 5px;">
+    <h4>Usuarios para teste:</h4>
+    <ul>
+        <li><strong>Admin:</strong> admin@techcar.com / admin123</li>
+        <li><strong>User:</strong> user@techcar.com / user123</li>
+    </ul>
+</div>
+</body>
+</html>

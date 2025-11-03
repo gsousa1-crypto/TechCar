@@ -30,9 +30,10 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/app/veiculos", true)  // Mude para veiculos
+                        .defaultSuccessUrl("/app/dashboard", true) // Corrigido para ir ao dashboard
                         .permitAll()
                 )
                 .logout(logout -> logout
