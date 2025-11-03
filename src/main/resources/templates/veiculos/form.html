@@ -17,6 +17,9 @@
 <h1 th:text="${veiculo.id != null} ? 'Editar Veiculo' : 'Novo Veiculo'">Novo Veiculo</h1>
 
 <form th:action="@{/app/veiculos}" th:object="${veiculo}" method="post">
+    <!-- CAMPO OCULTO COM O ID (IMPORTANTE!) -->
+    <input type="hidden" th:field="*{id}" th:if="${veiculo.id != null}">
+
     <div class="form-group">
         <label for="marca">Marca:</label>
         <input type="text" id="marca" th:field="*{marca}" required>
