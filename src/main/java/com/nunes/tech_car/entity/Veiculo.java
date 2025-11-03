@@ -23,14 +23,14 @@ public class Veiculo {
 
     private Integer ano;
 
-    private BigDecimal preco;  // CORRIGIDO
+    private BigDecimal preco;
 
     @Column(length = 1000)
-    private String descricao;  // CORRIGIDO
+    private String descricao;
 
-    private String imagemUrl;  // CORRIGIDO
+    private String imagemUrl;
 
-    @Enumerated(EnumType.STRING)  // CORRIGIDO
+    @Enumerated(EnumType.STRING)
     private StatusVeiculo status;
 
     private LocalDateTime dataCriacao;
