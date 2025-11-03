@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - TechCar</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .menu { background: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .btn { display: inline-block; padding: 10px 15px; margin: 5px;
+               background: #007bff; color: white; text-decoration: none;
+               border-radius: 3px; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+<h1>🚗 Dashboard TechCar</h1>
+<p>Bem-vindo ao sistema de vendas de veículos!</p>
+
+<div class="menu">
+    <h3>Menu Principal</h3>
+    <a th:href="@{/app/veiculos}" class="btn">📋 Gerenciar Veículos</a>
+    <a th:href="@{/}" class="btn">🏠 Página Inicial</a>
+    <a th:href="@{/logout}" class="btn">🚪 Sair</a>
+</div>
+
+<div style="margin-top: 30px;">
+    <h4>Usuários para teste:</h4>
+    <ul>
+        <li><strong>Admin:</strong> admin@techcar.com / admin123</li>
+        <li><strong>User:</strong> user@techcar.com / user123</li>
+    </ul>
+</div>
+</body>
+</html>

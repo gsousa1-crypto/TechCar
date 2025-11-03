@@ -16,16 +16,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/css/**", "/js/**").permitAll()
+                        // **CORREÇÃO:** Adicionado "/login" aqui.
+                        .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
+                        // O Spring Security também usa "/login" para processar o POST
                         .permitAll()
                 )
-                .logout(logout -> logout
-                        .permitAll()
+                .logout(logout -> logout.permitAll()
                 );
+
+        // Se você tiver problemas ao fazer POSTs (formulários), considere desabilitar o CSRF
+        // para desenvolvimento: .csrf(csrf -> csrf.disable())
 
         return http.build();
     }

@@ -10,4 +10,9 @@ public class AuthController {
     public String login() {
         return "auth/login";
     }
+
+    @GetMapping("/app/dashboard")
+    public String dashboard() {
+        return "app/dashboard";
+    }
 }
