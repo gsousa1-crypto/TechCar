@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Veículo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .veiculo-info { background: #f8f9fa; padding: 20px; border-radius: 5px; }
+        .btn { padding: 8px 15px; margin: 5px; text-decoration: none; border-radius: 3px; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+    </style>
+</head>
+<body>
+<h1>Detalhes do Veículo</h1>
+
+<div class="veiculo-info" th:if="${veiculo}">
+    <h2 th:text="${veiculo.marca + ' ' + veiculo.modelo}">Marca Modelo</h2>
+    <p><strong>Ano:</strong> <span th:text="${veiculo.ano}">2023</span></p>
+    <p><strong>Preço:</strong> R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}">0,00</span></p>
+    <p><strong>Status:</strong> <span th:text="${veiculo.status}">Disponível</span></p>
+    <p><strong>Descrição:</strong> <span th:text="${veiculo.descricao}">Descrição</span></p>
+    <p><strong>Data de Cadastro:</strong> <span th:text="${#temporals.format(veiculo.dataCriacao, 'dd/MM/yyyy HH:mm')}">01/01/2023</span></p>
+</div>
+
+<div style="margin-top: 20px;">
+    <a th:href="@{/app/veiculos/{id}/editar(id=${veiculo.id})}" class="btn btn-warning">Editar</a>
+    <a th:href="@{/app/veiculos}" class="btn btn-primary">Voltar à Lista</a>
+</div>
+</body>
+</html>
