@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login?logout")  // Redireciona para login com mensagem
                         .permitAll()
                 );
 

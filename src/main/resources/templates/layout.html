@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, styles, content)">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">TechCar System</title>
+
+    <th:block th:replace="${styles}" />
+
+    <style>
+        /* CORREÇÃO FUNDAMENTAL: Remove margens e paddings padrão do navegador */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            /* Configura o corpo para usar flexbox no modo coluna */
+            display: flex;
+            flex-direction: column;
+            min-height: 100%; /* Garante que o corpo tenha altura mínima total */
+        }
+
+        /* Estilos do Header */
+        .header {
+            background-color: #495057; /* Cinza escuro */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: normal;
+        }
+        .header a:hover { text-decoration: underline; }
+        .header button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        /* Container Principal do Conteúdo */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            /* Permite que o container cresça e empurre o footer para baixo */
+            flex-grow: 1;
+            width: 90%; /* Evita que o container grude nas laterais em telas pequenas */
+        }
+
+        /* Estilos do Footer */
+        .footer {
+            background-color: #6c757d; /* Cinza médio (cor ajustada) */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 0.9em;
+            width: 100%;
+            box-sizing: border-box;
+            /* Garante que o footer fique na parte inferior */
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{header :: default}"></div>
+
+<div class="container">
+    <div th:replace="${content}"></div>
+</div>
+
+<div th:replace="~{footer :: default}"></div>
+
+</body>
+</html>

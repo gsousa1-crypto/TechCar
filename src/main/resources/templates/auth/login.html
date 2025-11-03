@@ -4,50 +4,123 @@
     <meta charset="UTF-8">
     <title>Login - TechCar</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .login-box { max-width: 400px; margin: 0 auto; padding: 20px;
-                    border: 1px solid #ddd; border-radius: 5px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input[type="text"], input[type="password"] {
-            width: 100%; padding: 8px; border: 1px solid #ddd;
-            border-radius: 3px; box-sizing: border-box;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        button { width: 100%; padding: 10px; background: #007bff;
-                color: white; border: none; border-radius: 3px;
-                cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .error { color: red; margin-top: 10px; }
+        .login-box {
+            max-width: 400px;
+            width: 90%;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        h2 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #495057;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .error {
+            color: #dc3545;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .success {
+            color: #28a745;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        .user-test {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
 <div class="login-box">
-    <h2>🔐 Login - TechCar</h2>
+    <h2>Login - TechCar</h2>
 
     <div th:if="${param.error}" class="error">
-        ❌ Email ou senha inválidos!
+        Email ou senha inválidos!
+    </div>
+    <div th:if="${param.logout}" class="success">
+        Logout realizado com sucesso!
     </div>
 
     <form th:action="@{/login}" method="post">
         <div class="form-group">
             <label for="username">Email:</label>
             <input type="text" id="username" name="username"
-                   placeholder="admin@techcar.com" required>
+                   placeholder="Digite seu email" required>
         </div>
 
         <div class="form-group">
             <label for="password">Senha:</label>
             <input type="password" id="password" name="password"
-                   placeholder="admin123" required>
+                   placeholder="Digite sua senha" required>
         </div>
 
         <button type="submit">Entrar</button>
     </form>
 
-    <div style="margin-top: 20px; font-size: 0.9em;">
+    <div class="user-test">
         <p><strong>Usuários de teste:</strong></p>
-        <p>👑 Admin: admin@techcar.com / admin123</p>
-        <p>👤 User: user@techcar.com / user123</p>
+        <p>Admin: admin@techcar.com / admin123</p>
+        <p>User: user@techcar.com / user123</p>
     </div>
 </div>
 </body>
