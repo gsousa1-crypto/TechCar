@@ -1,54 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout (~{::title}, ~{::styles}, ~{::content})}">
+
 <head>
-    <meta charset="UTF-8">
     <title>TechCar - Veículos</title>
-    <style>
-        .veiculo-card { border: 1px solid #ddd; padding: 15px; margin: 10px; border-radius: 5px; }
-        .search-box { margin: 20px 0; }
-        .btn { padding: 8px 15px; margin: 5px; text-decoration: none; border-radius: 3px; }
-        .btn-primary { background: #007bff; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-warning { background: #ffc107; color: black; }
-        .btn-danger { background: #dc3545; color: white; }
-    </style>
+    <th:block th:fragment="styles">
+        <style>
+            .veiculo-card { border: 1px solid #ddd; padding: 15px; margin: 10px; border-radius: 5px; }
+            .search-box { margin: 20px 0; }
+            .btn { padding: 8px 15px; margin: 5px; text-decoration: none; border-radius: 3px; }
+            .btn-primary { background: #007bff; color: white; }
+            .btn-success { background: #28a745; color: white; }
+            .btn-warning { background: #ffc107; color: black; }
+            .btn-danger { background: #dc3545; color: white; }
+        </style>
+    </th:block>
 </head>
 <body>
-<h1>Lista de Veículos</h1>
+<div th:fragment="content">
+    <h1>Lista de Veículos</h1>
 
-<!-- Busca -->
-<div class="search-box">
-    <form th:action="@{/app/veiculos}" method="get">
-        <input type="text" name="search" th:value="${search}" placeholder="Buscar por marca...">
-        <button type="submit">Buscar</button>
-        <a th:href="@{/app/veiculos}" class="btn">Limpar</a>
-    </form>
-</div>
+    <div class="search-box">
+        <form th:action="@{/app/veiculos}" method="get">
+            <input type="text" name="search" th:value="${search}" placeholder="Buscar por marca...">
+            <button type="submit">Buscar</button>
+            <a th:href="@{/app/veiculos}" class="btn">Limpar</a>
+        </form>
+    </div>
 
-<!-- Botão Novo Veículo -->
-<a th:href="@{/app/veiculos/novo}" class="btn btn-primary">Novo Veículo</a>
+    <a th:href="@{/app/veiculos/novo}" class="btn btn-primary">Novo Veículo</a>
 
-<!-- Lista de Veículos -->
-<div th:each="veiculo : ${veiculos}" class="veiculo-card">
-    <h3 th:text="${veiculo.marca + ' ' + veiculo.modelo}">Marca Modelo</h3>
-    <p><strong>Ano:</strong> <span th:text="${veiculo.ano}">2023</span></p>
-    <p><strong>Preço:</strong> R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}">0,00</span></p>
-    <p><strong>Status:</strong> <span th:text="${veiculo.status}">Disponível</span></p>
+    <div th:each="veiculo : ${veiculos}" class="veiculo-card">
+        <h3 th:text="${veiculo.marca + ' ' + veiculo.modelo}">Marca Modelo</h3>
+        <p><strong>Ano:</strong> <span th:text="${veiculo.ano}">2023</span></p>
+        <p><strong>Preço:</strong> R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}">0,00</span></p>
+        <p><strong>Status:</strong> <span th:text="${veiculo.status}">Disponível</span></p>
 
-    <div>
-        <a th:href="@{/app/veiculos/{id}(id=${veiculo.id})}" class="btn btn-success">Ver</a>
-        <a th:href="@{/app/veiculos/{id}/editar(id=${veiculo.id})}" class="btn btn-warning">Editar</a>
-        <a th:href="@{/app/veiculos/{id}/excluir(id=${veiculo.id})}" class="btn btn-danger"
-           onclick="return confirm('Tem certeza que deseja excluir este veículo?')">Excluir</a>
+        <div>
+            <a th:href="@{/app/veiculos/{id}(id=${veiculo.id})}" class="btn btn-success">Ver</a>
+            <a th:href="@{/app/veiculos/{id}/editar(id=${veiculo.id})}" class="btn btn-warning">Editar</a>
+            <a th:href="@{/app/veiculos/{id}/excluir(id=${veiculo.id})}" class="btn btn-danger"
+               onclick="return confirm('Tem certeza que deseja excluir este veículo?')">Excluir</a>
+        </div>
+    </div>
+
+    <div th:if="${veiculos.empty}">
+        <p>Nenhum veículo encontrado.</p>
     </div>
 </div>
-
-<!-- Mensagem se não houver veículos -->
-<div th:if="${veiculos.empty}">
-    <p>Nenhum veículo encontrado.</p>
-</div>
-
-<br>
-<a th:href="@{/app/dashboard}">← Voltar ao Dashboard</a>
 </body>
 </html>

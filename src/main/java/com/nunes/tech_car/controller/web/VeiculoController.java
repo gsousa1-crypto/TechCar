@@ -1,4 +1,4 @@
-package com.nunes.tech_car.controller;
+package com.nunes.tech_car.controller.web;
 
 import com.nunes.tech_car.entity.Veiculo;
 import com.nunes.tech_car.service.VeiculoService;
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/app/veiculos")
@@ -21,8 +21,10 @@ public class VeiculoController {
         List<Veiculo> veiculos;
 
         if (search != null && !search.trim().isEmpty()) {
-            veiculos = veiculoService.findByMarca(search);
+            // ✅ CORRETO: buscar por marca
+            veiculos = veiculoService.buscarPorMarca(search);
         } else {
+            // ✅ CORRETO: buscar todos
             veiculos = veiculoService.findAll();
         }
 
@@ -31,8 +33,10 @@ public class VeiculoController {
         return "veiculos/list";
     }
 
+    // MÉTODOS ADICIONAIS DO CRUD:
+
     @GetMapping("/novo")
-    public String mostrarFormularioNovo(Model model) {
+    public String mostrarFormNovo(Model model) {
         model.addAttribute("veiculo", new Veiculo());
         return "veiculos/form";
     }
@@ -43,29 +47,17 @@ public class VeiculoController {
         return "redirect:/app/veiculos";
     }
 
-    @GetMapping("/{id}/editar")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
-        Optional<Veiculo> veiculo = veiculoService.findById(id);
-        if (veiculo.isPresent()) {
-            model.addAttribute("veiculo", veiculo.get());
-            return "veiculos/form";
-        }
-        return "redirect:/app/veiculos";
+    @GetMapping("/editar/{id}")
+    public String mostrarFormEditar(@PathVariable Long id, Model model) {
+        Veiculo veiculo = veiculoService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+        model.addAttribute("veiculo", veiculo);
+        return "veiculos/form";
     }
 
-    @GetMapping("/{id}/excluir")
+    @GetMapping("/excluir/{id}")
     public String excluirVeiculo(@PathVariable Long id) {
         veiculoService.deleteById(id);
-        return "redirect:/app/veiculos";
-    }
-
-    @GetMapping("/{id}")
-    public String verDetalhes(@PathVariable Long id, Model model) {
-        Optional<Veiculo> veiculo = veiculoService.findById(id);
-        if (veiculo.isPresent()) {
-            model.addAttribute("veiculo", veiculo.get());
-            return "veiculos/detalhes";
-        }
         return "redirect:/app/veiculos";
     }
 }
