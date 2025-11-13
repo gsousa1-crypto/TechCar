@@ -1,4 +1,4 @@
-package com.nunes.tech_car.controller;
+package com.nunes.tech_car.controller.web;
 
 import com.nunes.tech_car.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;

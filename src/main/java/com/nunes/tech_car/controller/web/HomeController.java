@@ -1,5 +1,5 @@
 // Crie/Edite o arquivo HomeController.java
-package com.nunes.tech_car.controller;
+package com.nunes.tech_car.controller.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

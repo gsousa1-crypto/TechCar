@@ -1,10 +1,18 @@
 package com.nunes.tech_car.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+
+@Getter
+@Setter
+@ToString
 @Data
 @Entity
 @Table(name = "veiculos")  // CORRIGIDO
@@ -45,4 +53,8 @@ public class Veiculo {
         this.dataCriacao = LocalDateTime.now();
         this.status = StatusVeiculo.DISPONIVEL;
     }
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonIgnore // Evita loop infinito na serialização
+    private Usuario usuario;
 }

@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.DependsOn;
 import com.nunes.tech_car.entity.Veiculo;
 import com.nunes.tech_car.repository.VeiculoRepository;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
 @Component
+@DependsOn("securityConfig")
 public class DataLoader implements CommandLineRunner {
 
     // Dependências Autowired
