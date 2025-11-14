@@ -6,8 +6,15 @@
     <th:block th:replace="${styles}" />
 
     <style>
+        /* ============================================= */
         /* --- Reset e Sticky Footer --- */
-        html, body { height: 100%; margin: 0; padding: 0; background-color: #f4f4f4; }
+        /* ============================================= */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Fundo cinza (visível entre os cards) */
+        }
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -15,70 +22,125 @@
             min-height: 100%;
         }
 
+        /* ============================================= */
         /* --- ESTILOS DO HEADER --- */
+        /* ============================================= */
         .header {
-            background-color: #000000;
-            color: white;
-            /* ✅ MUDANÇA: Header um pouco mais alto */
-            padding: 20px 30px; /* Era 15px 30px */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            /* ... (Seu CSS de Header maior e preto) ... */
+            background-color: #000000; color: white; padding: 20px 30px;
+            display: flex; justify-content: space-between; align-items: center;
             border-bottom: 3px solid #007bff;
         }
-
-        /* Logo */
         .header-logo a { display: inline-block; }
-        .header-logo img {
-            /* ✅ MUDANÇA: Logo maior */
-            height: 60px; /* Era 50px */
-            width: auto;
-            vertical-align: middle;
-        }
-
-        /* Barra de Busca (ajustando padding para o novo header) */
-        .search-form-header { display: flex; width: 400px; }
-        .search-form-header input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #6c757d;
-            border-radius: 5px 0 0 5px;
-            border-right: none;
-            outline: none;
-        }
-        .search-form-header button {
-            padding: 10px 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-
-        /* Navegação */
+        .header-logo img { height: 60px; width: auto; vertical-align: middle; }
+        /* ... (CSS da Barra de Busca e Navegação) ... */
+        .search-form-header { position: relative; display: flex; width: 400px; }
+        .search-form-header input { flex-grow: 1; padding: 10px 10px 10px 50px; border: 1px solid #6c757d; background-color: #343a40; color: #ffffff; border-radius: 5px; outline: none; font-size: 0.9rem; }
+        .search-form-header input::placeholder { color: #adb5bd; }
+        .search-form-header button { position: absolute; left: 0; top: 0; height: 100%; padding: 0 15px; background: transparent; border: none; cursor: pointer; }
+        .search-form-header button .search-icon { height: 22px; width: auto; vertical-align: middle; filter: brightness(0) invert(1) brightness(0.8); }
         .header-nav { display: flex; align-items: center; gap: 15px; }
         .header-nav a { color: white; text-decoration: none; font-weight: normal; }
-        .header-nav button { /* Botão Sair */
-            background: none;
-            border: 1px solid #6c757d;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.9em;
-            padding: 5px 10px;
-        }
+        .header-nav button { background: none; border: 1px solid #6c757d; border-radius: 5px; color: white; cursor: pointer; font-size: 0.9em; padding: 5px 10px; }
 
-        /* --- Container e Footer --- */
+        /* ============================================= */
+        /* --- Container e Estrutura da Lista --- */
+        /* ============================================= */
+
+        /* ✅ MUDANÇA 1: Container Principal (Transparente) */
         .container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0; /* Remove o padding antigo */
+            background-color: transparent; /* Fica transparente */
+            border-radius: 0;
+            box-shadow: none; /* Remove a sombra antiga */
             flex-grow: 1;
             width: 90%;
         }
+
+        /* --- Layout da Lista (Sidebar + Conteúdo) --- */
+        .list-wrapper {
+            display: flex;
+            gap: 25px;
+        }
+
+        /* --- Sidebar (Esquerda) --- */
+        .list-sidebar {
+            width: 210px;
+            flex-shrink: 0;
+        }
+
+        /* ✅ MUDANÇA 2: A Sidebar de Ordenação VIRA um Card Branco */
+        .sort-sidebar-box {
+            background: #ffffff; /* Fundo branco */
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra suave */
+        }
+        .sort-sidebar-box h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: #343a40;
+            border-bottom: 2px solid #e9ecef; /* Linha divisória */
+            padding-bottom: 10px;
+        }
+        .sort-sidebar-box ul { list-style: none; padding: 0; margin: 15px 0 0 0; }
+        .sort-sidebar-box li { margin-bottom: 12px; }
+        .sort-sidebar-box a {
+            text-decoration: none;
+            color: #6c757d;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .sort-sidebar-box a:hover { text-decoration: underline; color: #007bff; }
+        .sort-sidebar-box a.active { color: #212529; font-weight: 700; }
+
+        /* ✅ MUDANÇA 3: O Conteúdo Principal VIRA um Card Branco */
+        .list-content {
+            flex-grow: 1;
+            background: #ffffff; /* Fundo branco */
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* ============================================= */
+        /* --- CSS GLOBAL (Cards, Paginação, etc.) --- */
+        /* ============================================= */
+
+        /* A grade agora fica dentro do .list-content */
+        .vehicle-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        /* ... (Resto do CSS dos Cards, Botões, Paginação, etc. - Sem mudanças) ... */
+        .veiculo-card { border: 1px solid #e9ecef; border-radius: 8px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: all 0.3s ease; overflow: hidden; }
+        .veiculo-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .veiculo-card img { width: 100%; height: 240px; object-fit: cover; }
+        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-content h3 { margin-top: 0; font-size: 1.5rem; font-weight: 600; }
+        .card-content .price { font-size: 1.25rem; font-weight: 700; color: #343a40; margin: 10px 0; }
+        .card-content .details { font-size: 0.9rem; color: #6c757d; line-height: 1.4; margin-bottom: 15px; }
+        .card-actions { margin-top: auto; display: flex; gap: 10px; }
+        .btn { display: inline-block; padding: 10px 15px; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; color: white; font-weight: 600; text-align: center; flex-grow: 1; transition: background-color 0.2s; }
+        .btn-primary { background: #007bff; }
+        .btn-secondary { background: #6c757d; }
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-success:hover { background: #218838; }
+        .btn-vendido { background-color: #dc3545; cursor: not-allowed; }
+        .pagination-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+        .pagination-controls .btn { flex-grow: 0; }
+        .pagination-controls .page-info { font-weight: 600; color: #495057; }
+        .message-success { color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+        .message-error { color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+
+        /* --- Footer --- */
         .footer {
             background-color: #000000;
             color: #aaa;

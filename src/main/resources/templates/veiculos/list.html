@@ -4,62 +4,115 @@
       th:replace="~{layout :: layout (~{::title}, ~{::styles}, ~{::content})}">
 <head>
     <title>Lista de Veículos - TechCar</title>
-    <th:block th:fragment="styles">
-        <style>
-            /* ... (Seus estilos .vehicle-grid, .veiculo-card, etc.) ... */
 
-            /* ✅ NOVO CSS: Estilo para os botões de paginação */
-            .pagination-controls {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 25px;
-            }
-            .pagination-controls .btn {
-                flex-grow: 0; /* Não deixa os botões de paginação crescerem */
-            }
-            .pagination-controls .page-info {
-                font-weight: 600;
-                color: #495057;
-            }
-        </style>
-    </th:block>
+    <th:block th:fragment="styles"></th:block>
+
 </head>
 <body>
 <div th:fragment="content">
 
-    <h1 th:text="${#strings.isEmpty(busca)} ? 'Lista de Veículos' : 'Resultados para: ' + ${busca}">Lista de Veículos</h1>
+    <div class="list-wrapper">
 
-    <div class="vehicle-grid">
+        <aside class="list-sidebar">
 
-        <div th:each="veiculo : ${veiculosPage.content}" class="veiculo-card">
+            <a th:href="@{/app/veiculos/novo}" class="btn btn-primary" style="margin-bottom: 20px; width: 100%; box-sizing: border-box;"
+               sec:authorize="hasRole('ADMIN')">
+                Novo Veículo
+            </a>
 
+            <div class="sort-sidebar-box">
+                <h3>Ordenar por</h3>
+                <ul>
+                    <li>
+                        <a th:href="@{/app/veiculos(busca=${busca}, page=0, sort='preco,ASC')}"
+                           th:classappend="${sortField == 'preco' AND sortDir == 'ASC'} ? 'active' : ''">
+                            Preço: Menor ao Maior
+                            <span th:if="${sortField == 'preco' AND sortDir == 'ASC'}">✓</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/app/veiculos(busca=${busca}, page=0, sort='preco,DESC')}"
+                           th:classappend="${sortField == 'preco' AND sortDir == 'DESC'} ? 'active' : ''">
+                            Preço: Maior ao Menor
+                            <span th:if="${sortField == 'preco' AND sortDir == 'DESC'}">✓</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/app/veiculos(busca=${busca}, page=0, sort='ano,DESC')}"
+                           th:classappend="${sortField == 'ano' AND sortDir == 'DESC'} ? 'active' : ''">
+                            Ano: Mais Recentes
+                            <span th:if="${sortField == 'ano' AND sortDir == 'DESC'}">✓</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/app/veiculos(busca=${busca}, page=0, sort='ano,ASC')}"
+                           th:classappend="${sortField == 'ano' AND sortDir == 'ASC'} ? 'active' : ''">
+                            Ano: Mais Antigos
+                            <span th:if="${sortField == 'ano' AND sortDir == 'ASC'}">✓</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="list-content">
+
+            <h1 th:text="${#strings.isEmpty(busca)} ? 'Lista de Veículos' : 'Resultados para: ' + ${busca}">Lista de Veículos</h1>
+
+            <div th:if="${successMessage}" class="message-success" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="message-error" th:text="${errorMessage}"></div>
+
+            <div class="vehicle-grid" th:if="${!veiculosPage.empty}">
+
+                <div th:each="veiculo : ${veiculosPage.content}" class="veiculo-card">
+                    <img th:src="@{${veiculo.imagemUrl}}" alt="Foto do Veículo">
+
+                    <div class="card-content">
+                        <h3 th:text="${veiculo.marca + ' ' + veiculo.modelo}"></h3>
+
+                        <div class="price">
+                            R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}"></span>
+                        </div>
+
+                        <div class="details">
+                            <strong>Ano:</strong> <span th:text="${veiculo.ano}"></span> |
+                            <span th:text="${veiculo.descricao}"></span>
+                        </div>
+
+                        <div class="card-actions">
+                            <div sec:authorize="hasRole('ADMIN')" style="display: contents;">
+                                <a th:href="@{/app/veiculos/{id}/editar(id=${veiculo.id})}" class="btn btn-warning">Editar</a>
+                                <a th:href="@{/app/veiculos/{id}/excluir(id=${veiculo.id})}" class="btn btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                            </div>
+                            <div sec:authorize="hasRole('USER')" style="display: contents;">
+                                <th:block th:if="${veiculo.status.toString() == 'DISPONIVEL'}">
+                                    <a th:href="@{/app/comprar/{veiculoId}(veiculoId=${veiculo.id})}" class="btn btn-success">Comprar Agora</a>
+                                    <a th:href="@{/app/veiculos/{id}(id=${veiculo.id})}" class="btn btn-primary">Ver Detalhes</a>
+                                </th:block>
+                                <th:block th:if="${veiculo.status.toString() == 'VENDIDO'}">
+                                    <span class="btn btn-vendido">Vendido</span>
+                                    <a th:href="@{/app/veiculos/{id}(id=${veiculo.id})}" class="btn btn-primary">Ver Detalhes</a>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <div th:if="${veiculosPage.empty}" style="margin-top: 20px; text-align: center;">
+            <p>Nenhum veículo encontrado com este critério de busca.</p>
         </div>
-    </div> <div th:if="${veiculosPage.empty}" style="margin-top: 20px; text-align: center;">
-    <p>Nenhum veículo encontrado com este critério de busca.</p>
-</div>
 
-    <nav class="pagination-controls" th:if="${veiculosPage.totalPages > 1}">
+            <nav class="pagination-controls" th:if="${veiculosPage.totalPages > 1}">
+                <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number - 1}, sort=${sortField + ',' + sortDir})}" th:if="${!veiculosPage.first}" class="btn btn-secondary">&larr; Anterior</a>
+                <span th:if="${veiculosPage.first}" style="width: 100px;"></span>
 
-        <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number - 1})}"
-           th:if="${!veiculosPage.first}"
-           class="btn btn-secondary">
-            &larr; Anterior
-        </a>
+                <span class="page-info" th:text="'Página ' + ${veiculosPage.number + 1} + ' de ' + ${veiculosPage.totalPages}"></span>
 
-        <span class="page-info" th:text="'Página ' + ${veiculosPage.number + 1} + ' de ' + ${veiculosPage.totalPages}">
-            Página 1 de 5
-        </span>
+                <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number + 1}, sort=${sortField + ',' + sortDir})}" th:if="${!veiculosPage.last}" class="btn btn-primary">Próximo &rarr;</a>
+                <span th:if="${veiculosPage.last}" style="width: 100px;"></span>
+            </nav>
 
-        <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number + 1})}"
-           th:if="${!veiculosPage.last}"
-           class="btn btn-primary">
-            Próximo &rarr;
-        </a>
-    </nav>
+        </main>
 
-    <br>
-    <a th:href="@{/app/dashboard}" sec:authorize="hasRole('ADMIN')">← Voltar ao Dashboard</a>
-</div>
+    </div> </div>
 </body>
 </html>

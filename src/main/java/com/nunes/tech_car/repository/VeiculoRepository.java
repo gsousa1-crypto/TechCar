@@ -30,4 +30,6 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
 
     // 6. Busca por faixa de preço
     List<Veiculo> findByPrecoBetween(Double minPreco, Double maxPreco);
+
+    List<Veiculo> findTop3ByOrderByDataCriacaoDesc();
 }

@@ -16,20 +16,18 @@ import java.util.Arrays;
 @DependsOn("securityConfig")
 public class DataLoader implements CommandLineRunner {
 
-    // Dependências Autowired
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired // Mova o Autowired do VeiculoRepository para junto dos outros
+    @Autowired
     private VeiculoRepository veiculoRepository;
 
     @Override
     public void run(String... args) throws Exception {
 
-        // 1. Lógica para criar Usuários (já estava correta)
         if (usuarioRepository.findByEmail("admin@techcar.com").isEmpty()) {
             Usuario admin = new Usuario();
             admin.setEmail("admin@techcar.com");
@@ -50,9 +48,8 @@ public class DataLoader implements CommandLineRunner {
             System.out.println("Usuario USER criado: user@techcar.com / user123");
         }
 
-        // 2. Lógica para criar Veículos (Bloco de código adicionado no local CORRETO)
         if (veiculoRepository.count() == 0) {
-            // Veiculo 1
+
             Veiculo veiculo1 = new Veiculo();
             veiculo1.setMarca("Toyota");
             veiculo1.setModelo("Corolla");
@@ -62,7 +59,6 @@ public class DataLoader implements CommandLineRunner {
             veiculo1.setImagemUrl("/images/car-placeholder.jpg");
             veiculoRepository.save(veiculo1);
 
-            // Veiculo 2
             Veiculo veiculo2 = new Veiculo();
             veiculo2.setMarca("Honda");
             veiculo2.setModelo("Civic");
@@ -72,7 +68,6 @@ public class DataLoader implements CommandLineRunner {
             veiculo2.setImagemUrl("/images/car-placeholder.jpg");
             veiculoRepository.save(veiculo2);
 
-            // Veiculo 3
             Veiculo veiculo3 = new Veiculo();
             veiculo3.setMarca("Ford");
             veiculo3.setModelo("Ranger");

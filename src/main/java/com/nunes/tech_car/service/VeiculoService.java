@@ -111,4 +111,8 @@ public class VeiculoService {
         }
         return veiculoRepository.findByMarcaContainingIgnoreCase(marca);
     }
+
+    public List<Veiculo> findLatest3() {
+        return veiculoRepository.findTop3ByOrderByDataCriacaoDesc();
+    }
 }
