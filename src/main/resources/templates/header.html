@@ -1,15 +1,27 @@
-<header th:fragment="default" class="header" xmlns:th="http://www.thymeleaf.org">
-    <div>
-        <a th:href="@{/}">TechCar</a>
-    </div>
-    <nav>
-        <a th:href="@{/app/dashboard}" th:if="${#authorization.expression('isAuthenticated()')}">Dashboard</a>
-        <a th:href="@{/app/veiculos}" th:if="${#authorization.expression('hasAnyRole(''ADMIN'', ''USER'')')}">Veículos</a>
-        <a th:href="@{/login}" th:if="${#authorization.expression('isAnonymous()')}">Login</a>
+<header th:fragment="default" class="header"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
 
-        <span th:if="${#authorization.expression('isAuthenticated()')}">
+    <div class="header-logo">
+        <a th:href="@{/}">
+            <img th:src="@{/logo.png}" alt="TechCar Logo">
+        </a>
+    </div>
+
+    <div class="header-search" sec:authorize="isAuthenticated()">
+        <form th:action="@{/app/veiculos}" method="get" class="search-form-header">
+            <input type="text" name="busca" placeholder="Buscar por marca...">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <nav class="header-nav">
+        <a th:href="@{/app/dashboard}" sec:authorize="hasRole('ADMIN')">Dashboard</a>
+        <a th:href="@{/app/veiculos}" sec:authorize="isAuthenticated()">Veículos</a>
+        <a th:href="@{/login}" sec:authorize="isAnonymous()">Login</a>
+
+        <span sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post" style="display: inline;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit">Sair</button>
             </form>
         </span>

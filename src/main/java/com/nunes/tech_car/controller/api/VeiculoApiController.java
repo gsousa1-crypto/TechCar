@@ -1,12 +1,16 @@
 package com.nunes.tech_car.controller.api;
 
+import com.nunes.tech_car.dto.VeiculoDTO;
 import com.nunes.tech_car.entity.Veiculo;
 import com.nunes.tech_car.service.VeiculoService;
-import io.swagger.v3.oas.annotations.Operation; // Importe as anotações
-import io.swagger.v3.oas.annotations.tags.Tag; // Importe as anotações
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,19 +18,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/veiculos")
+@RequestMapping("/api/veiculos") // Rota da API (retorna JSON)
 @CrossOrigin("*")
+@Tag(name = "Veículos", description = "Operações de CRUD para veículos")
+@RequiredArgsConstructor // Injeta o Service
 public class VeiculoApiController {
 
-    @Autowired
-    private VeiculoService veiculoService;
+    private final VeiculoService veiculoService;
 
     @GetMapping
+    @Operation(summary = "Lista todos os veículos (não paginado)")
     public ResponseEntity<List<Veiculo>> listarTodos() {
         return ResponseEntity.ok(veiculoService.findAll());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Busca um veículo pelo ID")
     public ResponseEntity<Veiculo> buscarPorId(@PathVariable Long id) {
         return veiculoService.findById(id)
                 .map(ResponseEntity::ok)
@@ -34,37 +41,41 @@ public class VeiculoApiController {
     }
 
     @PostMapping
-    public ResponseEntity<Veiculo> criar(@RequestBody Veiculo veiculo) {
-        Veiculo salvo = veiculoService.save(veiculo);
+    @Operation(summary = "Cria um novo veículo")
+    public ResponseEntity<Veiculo> criar(@RequestBody @Valid VeiculoDTO dto) { // Usa DTO
+        Veiculo salvo = veiculoService.saveFromDTO(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Veiculo> atualizar(@PathVariable Long id, @RequestBody Veiculo veiculo) {
-        if (!veiculoService.existsById(id)) {
+    @Operation(summary = "Atualiza um veículo existente")
+    public ResponseEntity<Veiculo> atualizar(@PathVariable Long id, @RequestBody @Valid VeiculoDTO dto) { // Usa DTO
+        try {
+            Veiculo atualizado = veiculoService.update(id, dto);
+            return ResponseEntity.ok(atualizado);
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-        veiculo.setId(id);
-        return ResponseEntity.ok(veiculoService.save(veiculo));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Remove um veículo pelo ID")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!veiculoService.existsById(id)) {
+        try {
+            veiculoService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-        veiculoService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
-    // ✅ CORREÇÃO: usar o método COM paginação
     @GetMapping("/busca")
+    @Operation(summary = "Busca veículos por marca (com paginação)")
     public ResponseEntity<Page<Veiculo>> buscar(
-            @RequestParam(required = false) String marca,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(required = false, defaultValue = "") String marca,
+            @PageableDefault(size = 10, page = 0) Pageable pageable) {
 
-        Page<Veiculo> resultado = veiculoService.buscarPorMarcaPaginado(marca, PageRequest.of(page, size));
+        Page<Veiculo> resultado = veiculoService.buscarPorMarcaPaginado(marca, pageable);
         return ResponseEntity.ok(resultado);
     }
 }
