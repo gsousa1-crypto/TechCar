@@ -1,52 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
       th:replace="~{layout :: layout (~{::title}, ~{::styles}, ~{::content})}">
-
 <head>
-    <title>TechCar - Veículos</title>
+    <title>Lista de Veículos - TechCar</title>
     <th:block th:fragment="styles">
         <style>
-            .veiculo-card { border: 1px solid #ddd; padding: 15px; margin: 10px; border-radius: 5px; }
-            .search-box { margin: 20px 0; }
-            .btn { padding: 8px 15px; margin: 5px; text-decoration: none; border-radius: 3px; }
-            .btn-primary { background: #007bff; color: white; }
-            .btn-success { background: #28a745; color: white; }
-            .btn-warning { background: #ffc107; color: black; }
-            .btn-danger { background: #dc3545; color: white; }
+            /* ... (Seus estilos .vehicle-grid, .veiculo-card, etc.) ... */
+
+            /* ✅ NOVO CSS: Estilo para os botões de paginação */
+            .pagination-controls {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 25px;
+            }
+            .pagination-controls .btn {
+                flex-grow: 0; /* Não deixa os botões de paginação crescerem */
+            }
+            .pagination-controls .page-info {
+                font-weight: 600;
+                color: #495057;
+            }
         </style>
     </th:block>
 </head>
 <body>
 <div th:fragment="content">
-    <h1>Lista de Veículos</h1>
 
-    <div class="search-box">
-        <form th:action="@{/app/veiculos}" method="get">
-            <input type="text" name="search" th:value="${search}" placeholder="Buscar por marca...">
-            <button type="submit">Buscar</button>
-            <a th:href="@{/app/veiculos}" class="btn">Limpar</a>
-        </form>
-    </div>
+    <h1 th:text="${#strings.isEmpty(busca)} ? 'Lista de Veículos' : 'Resultados para: ' + ${busca}">Lista de Veículos</h1>
 
-    <a th:href="@{/app/veiculos/novo}" class="btn btn-primary">Novo Veículo</a>
+    <div class="vehicle-grid">
 
-    <div th:each="veiculo : ${veiculos}" class="veiculo-card">
-        <h3 th:text="${veiculo.marca + ' ' + veiculo.modelo}">Marca Modelo</h3>
-        <p><strong>Ano:</strong> <span th:text="${veiculo.ano}">2023</span></p>
-        <p><strong>Preço:</strong> R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}">0,00</span></p>
-        <p><strong>Status:</strong> <span th:text="${veiculo.status}">Disponível</span></p>
+        <div th:each="veiculo : ${veiculosPage.content}" class="veiculo-card">
 
-        <div>
-            <a th:href="@{/app/veiculos/{id}(id=${veiculo.id})}" class="btn btn-success">Ver</a>
-            <a th:href="@{/app/veiculos/{id}/editar(id=${veiculo.id})}" class="btn btn-warning">Editar</a>
-            <a th:href="@{/app/veiculos/{id}/excluir(id=${veiculo.id})}" class="btn btn-danger"
-               onclick="return confirm('Tem certeza que deseja excluir este veículo?')">Excluir</a>
         </div>
-    </div>
+    </div> <div th:if="${veiculosPage.empty}" style="margin-top: 20px; text-align: center;">
+    <p>Nenhum veículo encontrado com este critério de busca.</p>
+</div>
 
-    <div th:if="${veiculos.empty}">
-        <p>Nenhum veículo encontrado.</p>
-    </div>
+    <nav class="pagination-controls" th:if="${veiculosPage.totalPages > 1}">
+
+        <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number - 1})}"
+           th:if="${!veiculosPage.first}"
+           class="btn btn-secondary">
+            &larr; Anterior
+        </a>
+
+        <span class="page-info" th:text="'Página ' + ${veiculosPage.number + 1} + ' de ' + ${veiculosPage.totalPages}">
+            Página 1 de 5
+        </span>
+
+        <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number + 1})}"
+           th:if="${!veiculosPage.last}"
+           class="btn btn-primary">
+            Próximo &rarr;
+        </a>
+    </nav>
+
+    <br>
+    <a th:href="@{/app/dashboard}" sec:authorize="hasRole('ADMIN')">← Voltar ao Dashboard</a>
 </div>
 </body>
 </html>
