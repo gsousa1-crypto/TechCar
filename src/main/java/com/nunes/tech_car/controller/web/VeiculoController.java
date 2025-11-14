@@ -6,9 +6,10 @@ import com.nunes.tech_car.service.FileStorageService;
 import com.nunes.tech_car.service.VeiculoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page; // Import para Page
-import org.springframework.data.domain.Pageable; // Import para Pageable
-import org.springframework.data.web.PageableDefault; // Import para PageableDefault
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort; // Importe o Sort
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,13 +25,10 @@ public class VeiculoController {
     private final VeiculoService veiculoService;
     private final FileStorageService fileStorageService;
 
-    /**
-     * Lista veículos com busca E paginação.
-     */
     @GetMapping
     public String listarVeiculos(
             @RequestParam(required = false, defaultValue = "") String busca,
-            // 2. Modifique o PageableDefault para incluir a ordenação padrão (por 'preco', 'asc')
+            // 1. A ordenação padrão (preco, ASC) é aplicada na primeira visita
             @PageableDefault(size = 6, page = 0, sort = "preco", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
@@ -38,16 +36,22 @@ public class VeiculoController {
 
         model.addAttribute("veiculosPage", veiculosPage);
         model.addAttribute("busca", busca);
-        // 3. Envie os parâmetros de ordenação atuais para o HTML
-        model.addAttribute("sortField", pageable.getSort().stream().findFirst().orElseThrow().getProperty());
-        model.addAttribute("sortDir", pageable.getSort().stream().findFirst().orElseThrow().getDirection().name());
+
+        // 2. ✅ LÓGICA DE EXTRAÇÃO DE SORT (MAIS SEGURA)
+        // Pega a primeira ordenação do pageable, ou usa "preco" como padrão se estiver VAZIO.
+        Sort.Order sortOrder = pageable.getSort().isSorted() ?
+                pageable.getSort().get().findFirst().orElse(Sort.Order.asc("preco")) :
+                Sort.Order.asc("preco");
+
+        model.addAttribute("sortField", sortOrder.getProperty());
+        model.addAttribute("sortDir", sortOrder.getDirection().name());
 
         return "veiculos/list";
     }
 
-    /**
-     * Mostra o formulário para criar um novo veículo (Admin).
-     */
+    // ... (Restante dos métodos: /novo, /editar, /salvar, /excluir, /id) ...
+    // (O código abaixo é o mesmo que você já tinha)
+
     @GetMapping("/novo")
     public String mostrarFormNovo(Model model) {
         model.addAttribute("veiculoDTO", new VeiculoDTO());
@@ -55,9 +59,6 @@ public class VeiculoController {
         return "veiculos/form";
     }
 
-    /**
-     * Mostra o formulário para editar um veículo (Admin).
-     */
     @GetMapping("/{id}/editar")
     public String mostrarFormEditar(@PathVariable Long id, Model model) {
         Veiculo veiculo = veiculoService.findById(id)
@@ -75,9 +76,6 @@ public class VeiculoController {
         return "veiculos/form";
     }
 
-    /**
-     * Salva (novo) ou Atualiza (existente) um veículo (Admin).
-     */
     @PostMapping("/salvar")
     public String salvarOuAtualizarVeiculo(
             @RequestParam(value = "id", required = false) Long id,
@@ -105,18 +103,12 @@ public class VeiculoController {
         return "redirect:/app/veiculos";
     }
 
-    /**
-     * Exclui um veículo (Admin).
-     */
     @GetMapping("/{id}/excluir")
     public String excluirVeiculo(@PathVariable Long id) {
         veiculoService.deleteById(id);
         return "redirect:/app/veiculos";
     }
 
-    /**
-     * Mostra a página de detalhes (pode ser usado por Admin e User).
-     */
     @GetMapping("/{id}")
     public String verDetalhes(@PathVariable Long id, Model model) {
         Veiculo veiculo = veiculoService.findById(id)

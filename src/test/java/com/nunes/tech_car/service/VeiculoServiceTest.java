@@ -13,8 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*; // Importa os asserts
-import static org.mockito.Mockito.*; // Importa o Mockito
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Define que vamos usar Mockito nesta classe de teste
@@ -31,7 +31,7 @@ class VeiculoServiceTest {
     private Veiculo veiculoTeste;
     private VeiculoDTO veiculoDtoTeste;
 
-    // (Opcional) Configuração que roda antes de CADA teste
+    // Configuração que roda antes de CADA teste
     @BeforeEach
     void setUp() {
         // Cria um DTO para usar nos testes de salvar/atualizar
@@ -53,17 +53,16 @@ class VeiculoServiceTest {
      */
     @Test
     void testFindAll() {
-        // 1. ARRANGE (Organizar): O que o mock deve fazer?
-        // Quando o 'veiculoRepository.findAll()' for chamado, retorne uma lista com o 'veiculoTeste'
+        // 1. ARRANGE (Organizar)
         when(veiculoRepository.findAll()).thenReturn(List.of(veiculoTeste));
 
-        // 2. ACT (Agir): Execute o método que queremos testar
+        // 2. ACT (Agir)
         List<Veiculo> resultado = veiculoService.findAll();
 
-        // 3. ASSERT (Verificar): O resultado foi o esperado?
-        assertNotNull(resultado); // A lista não pode ser nula
-        assertEquals(1, resultado.size()); // O tamanho da lista deve ser 1
-        assertEquals("Civic", resultado.get(0).getModelo());
+        // 3. ASSERT (Verificar)
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        assertEquals("Civic", resultado.get(0).getModelo()); // Corrigido
     }
 
     /**
@@ -72,28 +71,19 @@ class VeiculoServiceTest {
     @Test
     void testSaveFromDTO() {
         // 1. ARRANGE
-        // O Mockito precisa "capturar" o objeto que o saveFromDTO cria
-        // e fingir que o salvou no banco.
-
-        // Estamos dizendo: "Quando o repository salvar QUALQUER objeto Veiculo,
-        // apenas retorne o mesmo objeto que você recebeu."
         when(veiculoRepository.save(any(Veiculo.class))).thenAnswer(invocation -> {
             Veiculo v = invocation.getArgument(0);
             v.setId(99L); // Simula o banco de dados atribuindo um ID
             return v;
         });
-
-        // 2. ACT
-        // Chamamos o método de salvar (que não tem imagemUrl, usado pela API)
+      
         Veiculo veiculoSalvo = veiculoService.saveFromDTO(veiculoDtoTeste);
 
-        // 3. ASSERT
         assertNotNull(veiculoSalvo);
-        assertEquals(99L, veiculoSalvo.getId()); // Verifica se o ID foi atribuído
-        assertEquals("Ford", veiculoSalvo.getMarca()); // Verifica se a marca foi copiada do DTO
-        assertEquals(Veiculo.StatusVeiculo.DISPONIVEL, veiculoSalvo.getStatus()); // Verifica se o status padrão foi aplicado
+        assertEquals(99L, veiculoSalvo.getId());
+        assertEquals("Ford", veiculoSalvo.getMarca());
+        assertEquals(Veiculo.StatusVeiculo.DISPONIVEL, veiculoSalvo.getStatus());
 
-        // Verifica se o método save() do repositório foi chamado exatamente 1 vez
         verify(veiculoRepository, times(1)).save(any(Veiculo.class));
     }
 }

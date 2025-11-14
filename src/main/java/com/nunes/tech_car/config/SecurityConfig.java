@@ -20,16 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    // 1. Injetado para o UserDetailsService
     private final UsuarioRepository usuarioRepository;
 
-    // 2. Injetado para o redirecionamento pós-login
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-    /**
-     * Bean obrigatório para o DataLoader e para o Spring Security.
-     * @Lazy(false) força o carregamento imediato.
-     */
     @Bean
     @Lazy(false)
     public PasswordEncoder passwordEncoder() {
@@ -52,45 +46,43 @@ public class SecurityConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 
-    /**
-     * Bean que define as regras de permissão de URL e o fluxo de login.
-     */
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        // Permissões Públicas (CSS, JS, Imagens, Home, Login)
                         .requestMatchers(
                                 "/", "/home",
-                                "/css/**", "/js/**", "/images/**"
-                        ).permitAll()
+                                "/css/**", "/js/**", "/images/**",
+                                "/logo.png", "/lupa.png",
+                                "/uploads/**",
 
-                        // Permissões da API e Swagger (Abertas para teste)
-                        .requestMatchers(
+                                // Caminhos do Swagger/API
                                 "/api/**",
-                                "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**"
+                                "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**",
+                                "/webjars/**"
                         ).permitAll()
 
-                        // Permissões de Roles (Área Restrita)
+                        .requestMatchers("/login").permitAll()
+
+                        // ✅ Regras de Role (só como exemplo, ajuste se necessário)
                         .requestMatchers("/app/dashboard").hasRole("ADMIN")
-                        .requestMatchers("/app/clientes").hasRole("USER")
-                        .requestMatchers("/app/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/app/veiculos").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/app/comprar/**").hasRole("USER")
+                        .requestMatchers("/app/**").hasRole("ADMIN") // Admin pode acessar o resto de /app
 
                         // Qualquer outra requisição deve ser autenticada
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        // Usa o Handler customizado para redirecionar por Role
                         .successHandler(customAuthenticationSuccessHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        // Ao sair, volta para a página inicial (ou /login?logout se preferir)
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                // Desabilita CSRF (comum para APIs)
                 .csrf(csrf -> csrf.disable());
 
         return http.build();

@@ -14,7 +14,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* Fundo cinza (visível entre os cards) */
         }
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +29,7 @@
         .header {
             background-color: #000000;
             color: white;
-            padding: 20px 30px; /* Header maior */
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -38,32 +38,60 @@
 
         .header-logo a { display: inline-block; }
         .header-logo img {
-            height: 60px; /* Logo maior */
+            height: 60px;
             width: auto;
             vertical-align: middle;
         }
 
-        /* ... (Resto do CSS do Header: .search-form-header, .header-nav) ... */
-        .search-form-header { display: flex; width: 400px; }
-        .search-form-header input { flex-grow: 1; padding: 10px; border: 1px solid #6c757d; border-radius: 5px 0 0 5px; border-right: none; outline: none; }
-        .search-form-header button { padding: 10px 12px; background: #007bff; color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
+        .search-form-header {
+            position: relative;
+            display: flex;
+            width: 400px;
+        }
+        .search-form-header input {
+            flex-grow: 1;
+            padding: 10px 10px 10px 50px;
+            border: 1px solid #6c757d;
+            background-color: #343a40;
+            color: #ffffff;
+            border-radius: 5px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .search-form-header input::placeholder { color: #adb5bd; }
+        .search-form-header button {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            padding: 0 15px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .search-form-header button .search-icon {
+            height: 22px;
+            width: auto;
+            vertical-align: middle;
+            filter: brightness(0) invert(1) brightness(0.8);
+        }
+
         .header-nav { display: flex; align-items: center; gap: 15px; }
         .header-nav a { color: white; text-decoration: none; font-weight: normal; }
         .header-nav button { background: none; border: 1px solid #6c757d; border-radius: 5px; color: white; cursor: pointer; font-size: 0.9em; padding: 5px 10px; }
-
 
         /* ============================================= */
         /* --- Container e Estrutura da Lista --- */
         /* ============================================= */
 
-        /* Container Principal (Branco) */
+        /* Container Principal (Transparente) */
         .container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 20px;
-            background-color: white; /* Fundo branco para o container todo */
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 0;
+            background-color: transparent;
+            border-radius: 0;
+            box-shadow: none;
             flex-grow: 1;
             width: 90%;
         }
@@ -71,51 +99,56 @@
         /* --- Layout da Lista (Sidebar + Conteúdo) --- */
         .list-wrapper {
             display: flex;
-            gap: 25px; /* Aumenta o espaço entre sidebar e conteúdo */
+            gap: 25px;
         }
 
         /* --- Sidebar (Esquerda) --- */
         .list-sidebar {
-            /* ✅ MUDANÇA 1: Sidebar mais estreita (mais "à esquerda") */
             width: 210px;
             flex-shrink: 0;
         }
+
+        /* Card Branco da Sidebar */
         .sort-sidebar-box {
-            /* Removemos o fundo branco/sombra, pois o .container já é branco */
-            background: none;
-            border: none;
-            padding: 0;
-            box-shadow: none;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .sort-sidebar-box h3 {
             margin-top: 0;
             font-size: 1.2rem;
-            /* Removemos a borda de baixo */
             color: #343a40;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
         }
-        .sort-sidebar-box ul { list-style: none; padding: 0; margin: 0; }
+        .sort-sidebar-box ul { list-style: none; padding: 0; margin: 15px 0 0 0; }
         .sort-sidebar-box li { margin-bottom: 12px; }
         .sort-sidebar-box a {
             text-decoration: none;
-            /* ✅ MUDANÇA 2: Cor dos links para cinza */
             color: #6c757d;
             font-weight: 600;
             font-size: 0.95rem;
         }
-        .sort-sidebar-box a:hover {
-            text-decoration: underline;
-            color: #007bff; /* Links ficam azuis ao passar o mouse */
-        }
-        /* O link ativo fica preto e mais forte */
-        .sort-sidebar-box a.active {
-            color: #212529;
-            font-weight: 700;
-        }
+        .sort-sidebar-box a:hover { text-decoration: underline; color: #007bff; }
+        .sort-sidebar-box a.active { color: #212529; font-weight: 700; }
 
-        /* --- Conteúdo Principal (Direita) --- */
+        /* Card Branco do Conteúdo Principal */
         .list-content {
             flex-grow: 1;
-            /* Removemos o fundo branco, pois o .container já é branco */
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .list-content h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            color: #343a40;
         }
 
         /* ============================================= */
@@ -124,20 +157,33 @@
 
         .vehicle-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* 3 Colunas */
             gap: 25px;
-            /* Removemos o margin-top */
         }
-        /* ... (Resto do CSS dos Cards, Botões, Paginação, etc.) ... */
-        .veiculo-card { border: 1px solid #e9ecef; border-radius: 8px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: all 0.3s ease; overflow: hidden; }
+        .veiculo-card {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
         .veiculo-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .veiculo-card img { width: 100%; height: 240px; object-fit: cover; }
         .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
         .card-content h3 { margin-top: 0; font-size: 1.5rem; font-weight: 600; }
         .card-content .price { font-size: 1.25rem; font-weight: 700; color: #343a40; margin: 10px 0; }
         .card-content .details { font-size: 0.9rem; color: #6c757d; line-height: 1.4; margin-bottom: 15px; }
+
         .card-actions { margin-top: auto; display: flex; gap: 10px; }
-        .btn { display: inline-block; padding: 10px 15px; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; color: white; font-weight: 600; text-align: center; flex-grow: 1; transition: background-color 0.2s; }
+        .btn {
+            display: inline-block; padding: 10px 15px; text-decoration: none;
+            border-radius: 5px; border: none; cursor: pointer; color: white;
+            font-weight: 600; text-align: center; flex-grow: 1;
+            transition: background-color 0.2s;
+        }
         .btn-primary { background: #007bff; }
         .btn-secondary { background: #6c757d; }
         .btn-success { background: #28a745; }
@@ -146,11 +192,13 @@
         .btn-primary:hover { background: #0056b3; }
         .btn-success:hover { background: #218838; }
         .btn-vendido { background-color: #dc3545; cursor: not-allowed; }
+
         .pagination-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
         .pagination-controls .btn { flex-grow: 0; }
         .pagination-controls .page-info { font-weight: 600; color: #495057; }
-        .message-success { color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-        .message-error { color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+
+        .message-success { /* ... */ }
+        .message-error { /* ... */ }
 
         /* --- Footer --- */
         .footer {
@@ -163,6 +211,20 @@
             box-sizing: border-box;
             margin-top: auto;
         }
+
+        /* --- CSS Específico da Home (Bem-vindo) --- */
+        .welcome-container {
+            text-align: center;
+            padding: 80px 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .welcome-container h1 { font-size: 3.5rem; font-weight: 700; color: #343a40; margin-bottom: 10px; }
+        .welcome-container .lead { font-size: 1.5rem; color: #6c757d; margin-bottom: 40px; }
+        .btn-welcome { font-size: 1.1rem; padding: 12px 25px; font-weight: 600; }
+        .featured-title { text-align: center; font-size: 2rem; color: #343a40; margin-top: 40px; margin-bottom: 25px; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; }
+
     </style>
 </head>
 <body>

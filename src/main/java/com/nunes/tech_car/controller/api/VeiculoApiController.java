@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/veiculos") // Rota da API (retorna JSON)
+@RequestMapping("/api/veiculos")
 @CrossOrigin("*")
 @Tag(name = "Veículos", description = "Operações de CRUD para veículos")
-@RequiredArgsConstructor // Injeta o Service
+@RequiredArgsConstructor
 public class VeiculoApiController {
 
     private final VeiculoService veiculoService;

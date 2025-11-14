@@ -7,10 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-    /**
-     * Configura o Spring para mapear a URL /uploads/** para a pasta
-     * física "uploads/" no sistema de arquivos.
-     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry

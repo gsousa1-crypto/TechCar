@@ -10,8 +10,10 @@
 
     <div class="header-search" sec:authorize="isAuthenticated()">
         <form th:action="@{/app/veiculos}" method="get" class="search-form-header">
+            <button type="submit">
+                <img th:src="@{/lupa.png}" alt="Buscar" class="search-icon">
+            </button>
             <input type="text" name="busca" placeholder="Buscar por marca...">
-            <button type="submit">Buscar</button>
         </form>
     </div>
 
