@@ -24,9 +24,6 @@ repositories {
     mavenCentral()
 }
 
-test {
-    enabled = false
-}
 
 dependencies {
     // ✅ SPRING BOOT STARTERS (VERSÕES COMPATÍVEIS)

@@ -76,11 +76,9 @@ class VeiculoServiceTest {
             v.setId(99L); // Simula o banco de dados atribuindo um ID
             return v;
         });
-
-        // 2. ACT
+      
         Veiculo veiculoSalvo = veiculoService.saveFromDTO(veiculoDtoTeste);
 
-        // 3. ASSERT
         assertNotNull(veiculoSalvo);
         assertEquals(99L, veiculoSalvo.getId());
         assertEquals("Ford", veiculoSalvo.getMarca());
