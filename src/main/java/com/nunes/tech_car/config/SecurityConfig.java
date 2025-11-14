@@ -16,14 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-<<<<<<< Updated upstream
 @RequiredArgsConstructor // Injeta os componentes 'final'
-=======
-@RequiredArgsConstructor
->>>>>>> Stashed changes
 @EnableMethodSecurity
 public class SecurityConfig {
-
 
     private final UsuarioRepository usuarioRepository;
 
@@ -70,10 +65,15 @@ public class SecurityConfig {
 
                         .requestMatchers("/login").permitAll()
 
-                        // ... (Resto das suas regras: /app/**, etc.)
+                        // ✅ Regras de Role (só como exemplo, ajuste se necessário)
+                        .requestMatchers("/app/dashboard").hasRole("ADMIN")
+                        .requestMatchers("/app/veiculos").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/app/comprar/**").hasRole("USER")
+                        .requestMatchers("/app/**").hasRole("ADMIN") // Admin pode acessar o resto de /app
+
+                        // Qualquer outra requisição deve ser autenticada
                         .anyRequest().authenticated()
                 )
-                // ... (Resto da configuração: formLogin, logout, csrf)
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(customAuthenticationSuccessHandler)

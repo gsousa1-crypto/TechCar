@@ -11,6 +11,9 @@
 <body>
 <div th:fragment="content">
 
+    <div th:if="${successMessage}" class="message-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="message-error" th:text="${errorMessage}"></div>
+
     <div class="list-wrapper">
 
         <aside class="list-sidebar">
@@ -59,25 +62,14 @@
 
             <h1 th:text="${#strings.isEmpty(busca)} ? 'Lista de Veículos' : 'Resultados para: ' + ${busca}">Lista de Veículos</h1>
 
-            <div th:if="${successMessage}" class="message-success" th:text="${successMessage}"></div>
-            <div th:if="${errorMessage}" class="message-error" th:text="${errorMessage}"></div>
-
             <div class="vehicle-grid" th:if="${!veiculosPage.empty}">
 
                 <div th:each="veiculo : ${veiculosPage.content}" class="veiculo-card">
                     <img th:src="@{${veiculo.imagemUrl}}" alt="Foto do Veículo">
-
                     <div class="card-content">
                         <h3 th:text="${veiculo.marca + ' ' + veiculo.modelo}"></h3>
-
-                        <div class="price">
-                            R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}"></span>
-                        </div>
-
-                        <div class="details">
-                            <strong>Ano:</strong> <span th:text="${veiculo.ano}"></span> |
-                            <span th:text="${veiculo.descricao}"></span>
-                        </div>
+                        <div class="price">R$ <span th:text="${#numbers.formatDecimal(veiculo.preco, 0, 'POINT', 2, 'COMMA')}"></span></div>
+                        <div class="details"><strong>Ano:</strong> <span th:text="${veiculo.ano}"></span> | <span th:text="${veiculo.descricao}"></span></div>
 
                         <div class="card-actions">
                             <div sec:authorize="hasRole('ADMIN')" style="display: contents;">
@@ -97,16 +89,16 @@
                         </div>
                     </div>
                 </div>
-            </div> <div th:if="${veiculosPage.empty}" style="margin-top: 20px; text-align: center;">
-            <p>Nenhum veículo encontrado com este critério de busca.</p>
-        </div>
+            </div>
+
+            <div th:if="${veiculosPage.empty}" style="margin-top: 20px; text-align: center;">
+                <p>Nenhum veículo encontrado com este critério de busca.</p>
+            </div>
 
             <nav class="pagination-controls" th:if="${veiculosPage.totalPages > 1}">
                 <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number - 1}, sort=${sortField + ',' + sortDir})}" th:if="${!veiculosPage.first}" class="btn btn-secondary">&larr; Anterior</a>
                 <span th:if="${veiculosPage.first}" style="width: 100px;"></span>
-
                 <span class="page-info" th:text="'Página ' + ${veiculosPage.number + 1} + ' de ' + ${veiculosPage.totalPages}"></span>
-
                 <a th:href="@{/app/veiculos(busca=${busca}, page=${veiculosPage.number + 1}, sort=${sortField + ',' + sortDir})}" th:if="${!veiculosPage.last}" class="btn btn-primary">Próximo &rarr;</a>
                 <span th:if="${veiculosPage.last}" style="width: 100px;"></span>
             </nav>

@@ -6,39 +6,6 @@
     <title>Bem-vindo à TechCar</title>
 
     <th:block th:fragment="styles">
-        <style>
-            .welcome-container {
-                text-align: center;
-                padding: 40px 10px; /* Padding menor */
-            }
-            .welcome-container h1 {
-                font-size: 3.5rem;
-                font-weight: 700;
-                color: #343a40;
-                margin-bottom: 10px;
-            }
-            .welcome-container .lead {
-                font-size: 1.5rem;
-                color: #6c757d;
-                margin-bottom: 40px;
-            }
-            .btn-welcome {
-                font-size: 1.1rem;
-                padding: 12px 25px;
-                font-weight: 600;
-            }
-
-            /* Título para a seção de destaques */
-            .featured-title {
-                text-align: center;
-                font-size: 2rem;
-                color: #343a40;
-                margin-top: 40px;
-                margin-bottom: 25px;
-                border-bottom: 2px solid #e9ecef;
-                padding-bottom: 10px;
-            }
-        </style>
     </th:block>
 </head>
 <body>
@@ -59,7 +26,6 @@
     <h2 class="featured-title">Recém-Adicionados</h2>
 
     <div class="vehicle-grid">
-
         <div th:each="veiculo : ${destaques}" class="veiculo-card">
 
             <img th:src="@{${veiculo.imagemUrl}}" alt="Foto do Veículo">
