@@ -26,6 +26,7 @@
     <h2 class="featured-title">Recém-Adicionados</h2>
 
     <div class="vehicle-grid">
+
         <div th:each="veiculo : ${destaques}" class="veiculo-card">
 
             <img th:src="@{${veiculo.imagemUrl}}" alt="Foto do Veículo">
@@ -47,8 +48,5 @@
                     </div>
                     <a th:href="@{/app/veiculos/{id}(id=${veiculo.id})}" class="btn btn-primary">Ver Detalhes</a>
                 </div>
-            </div>
-        </div>
-    </div> </div>
-</body>
+            </div> </div> </div> </div> </body>
 </html>
