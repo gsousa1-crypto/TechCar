@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Sort;
 
 @Controller
 @RequestMapping("/app/veiculos")
@@ -29,14 +30,18 @@ public class VeiculoController {
     @GetMapping
     public String listarVeiculos(
             @RequestParam(required = false, defaultValue = "") String busca,
-            @PageableDefault(size = 6, page = 0) Pageable pageable, // Define o padrão: 6 itens por página
+            // 2. Modifique o PageableDefault para incluir a ordenação padrão (por 'preco', 'asc')
+            @PageableDefault(size = 6, page = 0, sort = "preco", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
-        // Usa o método de serviço que busca e pagina
         Page<Veiculo> veiculosPage = veiculoService.buscarPorMarcaPaginado(busca, pageable);
 
-        model.addAttribute("veiculosPage", veiculosPage); // Envia a PÁGINA (não uma Lista)
+        model.addAttribute("veiculosPage", veiculosPage);
         model.addAttribute("busca", busca);
+        // 3. Envie os parâmetros de ordenação atuais para o HTML
+        model.addAttribute("sortField", pageable.getSort().stream().findFirst().orElseThrow().getProperty());
+        model.addAttribute("sortDir", pageable.getSort().stream().findFirst().orElseThrow().getDirection().name());
+
         return "veiculos/list";
     }
 
