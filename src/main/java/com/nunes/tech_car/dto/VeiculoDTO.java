@@ -22,7 +22,4 @@ public class VeiculoDTO {
     private BigDecimal preco;
 
     private String descricao;
-
-    // (Opcional: Adicione o status se o Admin puder defini-lo)
-    // private Veiculo.StatusVeiculo status;
 }

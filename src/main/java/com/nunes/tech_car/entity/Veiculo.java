@@ -55,6 +55,6 @@ public class Veiculo {
     }
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonIgnore // Evita loop infinito na serialização
+    @JsonIgnore
     private Usuario usuario;
 }
