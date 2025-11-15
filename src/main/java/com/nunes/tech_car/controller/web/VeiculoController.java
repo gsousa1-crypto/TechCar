@@ -28,7 +28,7 @@ public class VeiculoController {
     @GetMapping
     public String listarVeiculos(
             @RequestParam(required = false, defaultValue = "") String busca,
-            // 1. A ordenação padrão (preco, ASC) é aplicada na primeira visita
+            //  A ordenação padrão (preco, ASC) é aplicada na primeira visita
             @PageableDefault(size = 6, page = 0, sort = "preco", direction = Sort.Direction.ASC) Pageable pageable,
             Model model) {
 
@@ -37,7 +37,7 @@ public class VeiculoController {
         model.addAttribute("veiculosPage", veiculosPage);
         model.addAttribute("busca", busca);
 
-        // 2. ✅ LÓGICA DE EXTRAÇÃO DE SORT (MAIS SEGURA)
+
         // Pega a primeira ordenação do pageable, ou usa "preco" como padrão se estiver VAZIO.
         Sort.Order sortOrder = pageable.getSort().isSorted() ?
                 pageable.getSort().get().findFirst().orElse(Sort.Order.asc("preco")) :
@@ -48,9 +48,6 @@ public class VeiculoController {
 
         return "veiculos/list";
     }
-
-    // ... (Restante dos métodos: /novo, /editar, /salvar, /excluir, /id) ...
-    // (O código abaixo é o mesmo que você já tinha)
 
     @GetMapping("/novo")
     public String mostrarFormNovo(Model model) {

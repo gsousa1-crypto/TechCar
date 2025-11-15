@@ -36,17 +36,17 @@ public class VendaController {
         }
 
         try {
-            // 1. Pega o email (username) do usuário logado
+            // Pega o email (username) do usuário logado
             String userEmail = principal.getName();
 
-            // 2. Busca o objeto Usuario completo pelo email
+            //  Busca o objeto Usuario completo pelo email
             Usuario usuarioLogado = usuarioRepository.findByEmail(userEmail)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-            // 3. Chama o serviço de venda
+            //  Chama o serviço de venda
             vendaService.realizarVenda(usuarioLogado.getId(), veiculoId);
 
-            // 4. Envia uma mensagem de sucesso para a próxima página
+            //  Envia uma mensagem de sucesso para a próxima página
             redirectAttributes.addFlashAttribute("successMessage", "Veículo comprado com sucesso!");
 
         } catch (Exception e) {

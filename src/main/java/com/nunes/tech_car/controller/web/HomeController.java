@@ -1,4 +1,4 @@
-package com.nunes.tech_car.controller.web; // (ou onde seu HomeController estiver)
+package com.nunes.tech_car.controller.web;
 
 import com.nunes.tech_car.entity.Veiculo;
 import com.nunes.tech_car.service.VeiculoService;
@@ -18,10 +18,10 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) { // 5. Receba o Model
 
-        // 6. Busque os carros em destaque
+        //  Busque os carros em destaque
         List<Veiculo> destaques = veiculoService.findLatest3();
 
-        // 7. Envie os carros para o HTML
+        // Envie os carros para o HTML
         model.addAttribute("destaques", destaques);
 
         return "home"; // -> /templates/home.html

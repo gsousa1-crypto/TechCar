@@ -16,14 +16,12 @@ public class DashboardController {
     @GetMapping("/app/dashboard")
     public String showDashboard(Model model) {
 
-        // **LOGICA PARA PREENCHER OS CARDS DO SEU TEMPLATE**
         long totalVeiculos = veiculoService.findAll().size();
         // Exemplo: assumindo que todos os veículos são disponíveis por enquanto
         long veiculosDisponiveis = totalVeiculos;
 
         model.addAttribute("totalVeiculos", totalVeiculos);
         model.addAttribute("veiculosDisponiveis", veiculosDisponiveis);
-        // FIM DA LOGICA
 
         // Retorna o template que o Thymeleaf deve buscar em:
         // src/main/resources/templates/app/dashboard.html

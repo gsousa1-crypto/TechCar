@@ -11,24 +11,23 @@ import java.util.List;
 @Repository
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
 
-    // ✅ MÉTODOS QUE FUNCIONAM:
 
-    // 1. Busca EXATA (precisa ser igual)
+    //  Busca EXATA (precisa ser igual)
     List<Veiculo> findByMarca(String marca);
 
-    // 2. Busca por CONTEÚDO (contém) - SEM paginação
+    //  Busca por CONTEÚDO (contém) - SEM paginação
     List<Veiculo> findByMarcaContainingIgnoreCase(String marca);
 
-    // 3. Busca por CONTEÚDO - COM paginação
+    //  Busca por CONTEÚDO - COM paginação
     Page<Veiculo> findByMarcaContainingIgnoreCase(String marca, Pageable pageable);
 
-    // 4. Busca por modelo
+    //  Busca por modelo
     List<Veiculo> findByModeloContainingIgnoreCase(String modelo);
 
-    // 5. Busca por ano
+    //  Busca por ano
     List<Veiculo> findByAno(Integer ano);
 
-    // 6. Busca por faixa de preço
+    //  Busca por faixa de preço
     List<Veiculo> findByPrecoBetween(Double minPreco, Double maxPreco);
 
     List<Veiculo> findTop3ByOrderByDataCriacaoDesc();
