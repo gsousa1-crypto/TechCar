@@ -1,303 +1,156 @@
-# 🚗 TechCar — Marketplace de Veículos Premium
+# 🚗 TechCar --- Marketplace de Veículos Premium
 
-##  1. Sobre o Projeto
+## 1. Sobre o Projeto
 
 **TechCar** é um marketplace de veículos premium desenvolvido como **Projeto 2 da disciplina**.  
 A aplicação oferece experiência completa tanto para **administradores** quanto para **clientes**, com autenticação, catálogo dinâmico e API REST documentada.
 
-###  Perfis de Usuário
+### Perfis de Usuário
 
 #### **ADMIN**
-- CRUD completo de veículos  
-- Upload de imagens  
-- Acesso total ao dashboard  
-- Gerenciamento de vendas  
+
+-   CRUD completo de veículos
+-   Upload de imagens
+-   Acesso total ao dashboard
+-   Gerenciamento de vendas
 
 #### **USER**
-- Navega pela vitrine de veículos  
-- Pesquisa, filtra e ordena veículos  
-- Realiza compras (gera a entidade `Venda`)
 
-O sistema possui backend robusto em camadas, API REST com Swagger e frontend renderizado com Thymeleaf.
+-   Navega pela vitrine de veículos
+-   Pesquisa, filtra e ordena veículos
+-   Realiza compras (gera a entidade `Venda`)
 
----
+O sistema possui backend robusto em camadas, API REST com Swagger e
+frontend renderizado com Thymeleaf.
 
-##  2. Tecnologias Utilizadas
+------------------------------------------------------------------------
 
-### **Backend**
-- Java 17  
-- Spring Boot 3.x  
-- Spring Security  
-- Spring Data JPA  
-- Lombok  
+## 2. Tecnologias Utilizadas
 
-### **Frontend**
-- Thymeleaf (com fragmentos de layout)
+-   **Java 17+**, Spring Boot 3.x (Web, Data JPA, Security, Validation)
+-   **Frontend:** Thymeleaf (com fragmentos de layout)
+-   **Banco:** Oracle Database (JDBC), Maven/Gradle
+-   **Outros:** Springdoc OpenAPI (Swagger UI), Lombok
 
-### **Banco**
-- Oracle Database (JDBC)
+------------------------------------------------------------------------
 
-### **Outros**
-- Springdoc OpenAPI  
-- Gradle 8+  
+## 3. Arquitetura (resumo)
 
----
-
-##  3. Arquitetura
+-   **Camadas:** controller (web/api) → service → repository
+-   **DTOs:** Objetos de transferência para entrada/saída de dados
+-   **Upload:** Serviço dedicado (`FileStorageService`) para gerenciar
+    imagens
 
 A arquitetura segue o padrão em camadas:
 
-```
-src
-├── main
-│   ├── java
-│   │   └── com
-│   │       └── nunes
-│   │           └── tech_car
-│   │               ├── config/
-│   │               │   ├── CustomAuthenticationSuccessHandler.java
-│   │               │   ├── DataLoader.java
-│   │               │   ├── MvcConfig.java       (Para /uploads)
-│   │               │   ├── OpenApiConfig.java   (Config. Swagger)
-│   │               │   └── SecurityConfig.java  (Config. Spring Security)
-│   │               │
-│   │               ├── controller
-│   │               │   ├── api/
-│   │               │   │   ├── VeiculoApiController.java
-│   │               │   │   └── VendaApiController.java
-│   │               │   └── web/
-│   │               │       ├── HomeController.java
-│   │               │       ├── VeiculoController.java
-│   │               │       └── VendaController.java
-│   │               │
-│   │               ├── dto/
-│   │               │   └── VeiculoDTO.java
-│   │               │
-│   │               ├── entity/
-│   │               │   ├── Usuario.java
-│   │               │   ├── Veiculo.java
-│   │               │   └── Venda.java
-│   │               │
-│   │               ├── repository/
-│   │               │   ├── UsuarioRepository.java
-│   │               │   ├── VeiculoRepository.java
-│   │               │   └── VendaRepository.java
-│   │               │
-│   │               └── service/
-│   │                   ├── FileStorageService.java
-│   │                   ├── VeiculoService.java
-│   │                   └── VendaService.java
-│   │
-│   └── resources
-│       ├── static/
-│       │   ├── logo.png
-│       │   └── lupa.png
-│       ├── templates/
-│       │   ├── veiculos/
-│       │   │   ├── list.html
-│       │   │   ├── form.html
-│       │   │   └── detalhes.html
-│       │   ├── auth/
-│       │   │   └── login.html
-│       │   ├── header.html    (Fragmento)
-│       │   ├── footer.html    (Fragmento)
-│       │   ├── layout.html    (Template Mestre)
-│       │   └── home.html
-│       └── application.properties
-│
-└── test
-    └── java
-        └── com
-            └── nunes
-                └── tech_car
-                    ├── controller/api/
-                    │   └── VeiculoApiControllerTest.java
-                    └── service/
-                        └── VeiculoServiceTest.java
-
-uploads/            (Pasta criada em tempo de execução, ignorada pelo .gitignore)
-README.md
-build.gradle
+``` text
+src/main/java/com/nunes/tech_car/
+  ├── config/          (Segurança, Swagger, MVC)
+  ├── controller/      (Web e API)
+  ├── dto/             (VeiculoDTO)
+  ├── entity/          (Usuario, Veiculo, Venda)
+  ├── repository/      (Interfaces JPA)
+  └── service/         (Regras de negócio e Upload)
 ```
 
----
+## 4. Requisitos de Ambiente
 
-## 🧩 4. Pré-requisitos
+-   JDK 17+
+-   Gradle 8+
+-   Banco Oracle configurado
 
-- **JDK 17+**  
-- **Gradle 8+**  
-- **Banco Oracle configurado**
+## 5. Configuração do Banco
 
----
+O projeto utiliza o Oracle Database. O DataLoader.java popula
+automaticamente o banco com: - Usuário ADMIN e USER - 3 veículos de
+exemplo
 
-##  5. Banco de Dados (Oracle)
+## 6. Configuração da Aplicação
 
-O `DataLoader.java` cria automaticamente:
+Edite o arquivo `src/main/resources/application.properties`:
 
-- Usuário **ADMIN**
-- Usuário **USER**
-- 3 veículos iniciais
+    spring.datasource.url=jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
+    spring.datasource.username=SEU_USUARIO_RM
+    spring.datasource.password=SUA_SENHA
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.show-sql=true
+    springdoc.api-docs.path=/v3/api-docs
 
----
-
-##  6. Configuração da Aplicação
-
-Edite o arquivo `application.properties`:
-
-```properties
-spring.datasource.url=jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
-spring.datasource.username=SEU_USUARIO_RM
-spring.datasource.password=SUA_SENHA
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-springdoc.swagger-ui.path=/swagger-ui.html
-springdoc.paths-to-match=/api/**
-```
-
----
-
-##  7. Instalação e Execução
+## 7. Instalação e Execução
 
 Clone o repositório:
 
-```bash
-git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
-cd tech-car
-```
+    git clone https://github.com/gsousa1-crypto/TechCar.git
+    cd tech-car
 
-(Build opcional)
+Execute a aplicação:
 
-```bash
-./gradlew clean
-```
+    ./gradlew bootRun
 
-Executar:
+Acesse: - App: http://localhost:8080\
+- Swagger UI: http://localhost:8080/swagger-ui.html
 
-```bash
-./gradlew bootRun
-```
+## 8. Seeds de Usuários
 
-### Acesso
+Criados automaticamente:
 
-- **Web App:** http://localhost:8080  
-- **Swagger:** http://localhost:8080/swagger-ui.html  
+-   Admin: `admin@techcar.com` / `admin123`
+-   User: `user@techcar.com` / `user123`
 
----
+## 9. Segurança (Rotas)
 
-## 8. Usuários de Teste
+**Públicas:** `/`, `/login`, `/home`, `/css`, `/js`, `/images`,
+`/uploads`\
+**Autenticadas:** `/app/veiculos`, `/app/veiculos/{id}`\
+**USER:** `/app/comprar/**`\
+**ADMIN:** `/app/dashboard`, CRUD veiculos
 
-### **Admin**
-- Email: **admin@techcar.com**  
-- Senha: **admin123**
+## 10. Rotas Web
 
-### **User**
-- Email: **user@techcar.com**  
-- Senha: **user123**
+-   `/` Home
+-   `/login`
+-   `/app/veiculos`
+-   `/app/veiculos/novo`
+-   `/app/dashboard`
 
----
+## 11. API REST
 
-## 9. Segurança & Permissões
+Base OpenAPI: `/v3/api-docs`\
+Swagger UI: `/swagger-ui.html`
 
-### 🔓 Rotas Públicas
-- `/`, `/home`, `/login`
-- Arquivos estáticos (`/css/**`, `/js/**`, `/images/**`, `/uploads/**`)
-- Swagger
+Exemplo:
 
-### 🔐 Autenticadas (USER ou ADMIN)
-- `/app/veiculos`
-- `/app/veiculos/{id}`
+    GET /api/veiculos/busca?marca=Honda&page=0&size=10
 
-### Apenas USER
-- `/app/comprar/**`
+## 12. Upload
 
-### Apenas ADMIN
-- `/app/dashboard`
-- `/app/veiculos/novo`
-- `/app/veiculos/{id}/editar`
-- `/app/veiculos/salvar`
-- `/app/veiculos/{id}/excluir`
+Upload no formulário `/app/veiculos/novo`, salvando em `/uploads`.
 
----
+## 13. Testes
 
-## 10. Rotas Web (Thymeleaf)
+    ./gradlew test
 
-| Rota | Descrição |
-|------|-----------|
-| `/` | Home + vitrine de 3 veículos recentes |
-| `/login` | Login |
-| `/app/veiculos` | Lista com busca, filtros, ordenação |
-| `/app/veiculos/novo` | (Admin) Formulário de criação |
-| `/app/veiculos/{id}/editar` | (Admin) Edição |
-| `/app/veiculos/salvar` | (Admin) Salvar |
-| `/app/veiculos/{id}` | Detalhes |
-| `/app/veiculos/{id}/excluir` | (Admin) Deletar |
-| `/app/comprar/{id}` | (User) Comprar |
-| `/app/dashboard` | (Admin) Dashboard |
+## 14. CI
 
----
+GitHub Actions configurado.
 
-## 11. API REST (Swagger)
+## 15. Checklist de Reprodutibilidade
 
-Documentação:  
-**http://localhost:8080/swagger-ui.html**
+\[x\] Ambiente configurado\
+\[x\] Seeds funcionando\
+\[x\] CRUD e upload funcionando
 
-### Veículos — `/api/veiculos`
-- `GET /` — Todos  
-- `GET /busca` — Filtros + paginação  
-- `GET /{id}` — Buscar por ID  
-- `POST /` — (Admin) Cria  
-- `PUT /{id}` — (Admin) Atualiza  
-- `DELETE /{id}` — (Admin) Excluir  
+## 16. Links
 
-### Vendas — `/api/vendas`
-- `GET /minhas-compras` — (User) Histórico do usuário  
-- `GET /` — (Admin) Todas as vendas  
+Repositório: https://github.com/gsousa1-crypto/TechCar\
+Vídeo: https://www.youtube.com/watch?v=q2MdjPLvAsw
 
----
+## 17. Autores
 
-##  12. Upload de Imagens
-
-- Realizado no formulário de veículos  
-- Arquivos armazenados via `FileStorageService`  
-- Servidos pela pasta `/uploads` exposta em `MvcConfig`  
-- Guarda apenas o path no banco  
-
----
-
-##  13. Testes Automatizados
-
-### Testes de Unidade
-- `VeiculoServiceTest`
-
-### Testes de Integração
-- `VeiculoApiControllerTest`
-
-Executar:
-
-```bash
-./gradlew test
-```
-
----
-
-##  14. CI (GitHub Actions)
-
-Workflow executa automaticamente:
-
-```bash
-./gradlew test
-```
-
-em `main` e `develop`.
-
-
-## 16. Autores
-
-| Integrante                  |  RA            |
-|---------------------------- | -------------- |
-| Guilherme Sousa dos Santos  | RA: 925114478  |
-| Leonardo Cerati do Nasciment| RA: 3025103009 |
-| Wagner Henrique de Oliveira | RA: 3025102838 |
-| Pedro Kaori Silva Araújo    | RA: 3025104252 |
+| Integrante                   | RA             | Contribuição |
+|------------------------------|----------------| ------------ |
+| Guilherme Sousa dos Santos   | RA: 925114478  | API REST |
+| Leonardo Cerati do Nasciment | RA: 3025103009 | Frontend |
+| Wagner Henrique de Oliveira  | RA: 3025102838 | Segurança |
+| Pedro Kaori Silva Araújo     | RA: 3025104252 | Veículo + Upload |
+| Guilherme da Costa Roberto   |   3024102838   |  Venda + Regras |
