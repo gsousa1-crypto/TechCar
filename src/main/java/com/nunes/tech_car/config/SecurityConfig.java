@@ -51,13 +51,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
+                        // Recursos Estáticos e Públicos (Login, Home, API, Swagger)
                         .requestMatchers(
                                 "/", "/home",
                                 "/css/**", "/js/**", "/images/**",
                                 "/logo.png", "/lupa.png",
                                 "/uploads/**",
-
-                                // Caminhos do Swagger/API
                                 "/api/**",
                                 "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**",
                                 "/webjars/**"
@@ -65,13 +64,18 @@ public class SecurityConfig {
 
                         .requestMatchers("/login").permitAll()
 
-                        // ✅ Regras de Role (só como exemplo, ajuste se necessário)
-                        .requestMatchers("/app/dashboard").hasRole("ADMIN")
-                        .requestMatchers("/app/veiculos").hasAnyRole("USER", "ADMIN")
+                        //  Regras Específicas do ADMIN (Ações de modificação)
+                        .requestMatchers(
+                                "/app/dashboard",
+                                "/app/veiculos/novo",
+                                "/app/veiculos/salvar",
+                                "/app/veiculos/*/editar",
+                                "/app/veiculos/*/excluir"
+                        ).hasRole("ADMIN")
+                        .requestMatchers("/app/veiculos/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/app/comprar/**").hasRole("USER")
-                        .requestMatchers("/app/**").hasRole("ADMIN") // Admin pode acessar o resto de /app
+                        .requestMatchers("/app/**").hasRole("ADMIN")
 
-                        // Qualquer outra requisição deve ser autenticada
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
